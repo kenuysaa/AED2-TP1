@@ -1,22 +1,16 @@
-from Node import Node
+from node import Node
 
 class B_Tree:
     def __int__(self, ordem):
         self.raiz = Node(folha=True)
         self.ordem = ordem
     
-    def __init__(self, ordem):
-        self.raiz = Node(ordem, folha=True)  # Inicializa a árvore com a raiz como folha
-        self.ordem = ordem  # Ordem da árvore B (grau mínimo)
-    
-    # Inserir uma chave na árvore
     def inserir(self, chave):
         raiz = self.raiz
-        # Verifica se a raiz está cheia (contém 2 * ordem - 1 chaves)
-        if len(raiz.chaves) == (2 * self.ordem) - 1:
-            # Se estiver cheia, cria um novo nó temporário e define-o como raiz
+        # Se estiver cheia, cria um novo nó temporário e define-o como raiz 
+        if len(raiz.chave) == (2 * self.ordem) - 1: 
             novo_no = Node(self.ordem, folha=False)
-            novo_no.filhos.append(self.raiz)  # O novo nó terá a raiz original como filho
+            novo_no.filho.append(self.raiz)  # O novo nó terá a raiz original como filho
             self.dividir_no(novo_no, 0)  # Divide a raiz original
             self.inserir_nao_cheio(novo_no, chave)  # Insere a chave no novo nó
             self.raiz = novo_no  # Atualiza a raiz para o novo nó
@@ -41,6 +35,31 @@ class B_Tree:
         if not no_cheio.folha:
             novo_no.filhos = no_cheio.filhos[ordem:(2 * ordem)]
             no_cheio.filhos = no_cheio.filhos[0:(ordem - 1)]
+    
+    def inserir_nao_cheio(self, no_atual, chave):
+        if no_atual.folha:
+            # Se for uma folha, insere diretamente na lista de chaves
+            i = len(no_atual.chaves) - 1
+            no_atual.chaves.append(0)  # Adiciona um espaço para a nova chave
+            while i >= 0 and chave < no_atual.chaves[i]:
+                no_atual.chaves[i + 1] = no_atual.chaves[i]
+                i -= 1
+            no_atual.chaves[i + 1] = chave
+        else:
+            # Se não for uma folha, insere no filho adequado
+            i = len(no_atual.chaves) - 1
+            while i >= 0 and chave < no_atual.chaves[i]:
+                i -= 1
+            i += 1
+            if len(no_atual.filhos[i].chaves) == (2 * self.ordem) - 1:
+                self.dividir_no(no_atual, i)
+                if chave > no_atual.chaves[i]:
+                    i += 1
+            self.inserir_nao_cheio(no_atual.filhos[i], chave)
+
+    def __str__(self):
+        r = self.raiz
+        return r.__str__() + '\n'.join([str(child) for child in r.filhos])
 
 
     # buscar
