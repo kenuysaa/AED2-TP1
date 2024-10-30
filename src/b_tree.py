@@ -13,6 +13,7 @@ class B_Tree:
         if len(raiz.chaves) == (2 * self.ordem):
             nova_raiz = Node(self.ordem, folhas=False)
         else:
+            self._inserir_nao_cheio(raiz, chave)
     
     def _dividir_node(self, node_pai, i): # node com maximo de registros
         ordem = self.ordem
