@@ -5,5 +5,4 @@ class Filme:
         self.genero = genero
 
     def __str__(self):
-        return f"{self.titulo}, {self.ano} - {self.genero}"
-        
+        return f"{self.titulo} ({self.ano}) - {self.genero}"

@@ -1,66 +1,56 @@
 from node import Node
 
 class B_Tree:
-    def __int__(self, ordem):
-        self.raiz = Node(folha=True)
+    def __init__(self, ordem):
+        self.raiz = Node(folhas=True)
         self.ordem = ordem
-    
+
+    #### inserir novo no ###
     def inserir(self, chave):
         raiz = self.raiz
-        # Se estiver cheia, cria um novo nó temporário e define-o como raiz 
-        if len(raiz.chave) == (2 * self.ordem) - 1: 
-            novo_no = Node(self.ordem, folha=False)
-            novo_no.filho.append(self.raiz)  # O novo nó terá a raiz original como filho
-            self.dividir_no(novo_no, 0)  # Divide a raiz original
-            self.inserir_nao_cheio(novo_no, chave)  # Insere a chave no novo nó
-            self.raiz = novo_no  # Atualiza a raiz para o novo nó
+        # se a quantidade de chaves for igual a 2m
+        # cria nova raiz e divide
+        if len(raiz.chaves) == (2 * self.ordem):
+            nova_raiz = Node(self.ordem, folhas=False)
         else:
-            self.inserir_nao_cheio(raiz, chave)
-
-    # Função para dividir um nó filho cheio
-    def dividir_no(self, no_pai, indice_filho):
-        ordem = self.ordem
-        no_cheio = no_pai.filhos[indice_filho]
-        novo_no = Node(ordem, folha=no_cheio.folha)  # Cria um novo nó para armazenar metade das chaves
-
-        # Movendo as chaves e filhos de no_cheio para novo_no
-        no_pai.filhos.insert(indice_filho + 1, novo_no)
-        no_pai.chaves.insert(indice_filho, no_cheio.chaves[ordem - 1])
-
-        # Dividindo as chaves
-        novo_no.chaves = no_cheio.chaves[ordem:(2 * ordem - 1)]
-        no_cheio.chaves = no_cheio.chaves[0:(ordem - 1)]
-
-        # Se o nó não for folha, também movemos os filhos
-        if not no_cheio.folha:
-            novo_no.filhos = no_cheio.filhos[ordem:(2 * ordem)]
-            no_cheio.filhos = no_cheio.filhos[0:(ordem - 1)]
     
-    def inserir_nao_cheio(self, no_atual, chave):
-        if no_atual.folha:
-            # Se for uma folha, insere diretamente na lista de chaves
-            i = len(no_atual.chaves) - 1
-            no_atual.chaves.append(0)  # Adiciona um espaço para a nova chave
-            while i >= 0 and chave < no_atual.chaves[i]:
-                no_atual.chaves[i + 1] = no_atual.chaves[i]
+    def _dividir_node(self, node_pai, i): # node com maximo de registros
+        ordem = self.ordem
+        node_cheio = node_pai.filhos[i]
+        node_novo = Node(ordem, folhas=node_cheio.folhas)
+
+        node_pai.filhos.inserir(i + 1, node_novo)
+        node_pai.chaves.inserir(i, node_cheio.chaves[ordem - 1])
+
+        # criar uma nova lista a partir de um subconjunto da lista original
+        # facilitando a divisão das chaves durante a operação de divisão de um nó em uma árvore B
+        node_novo.chaves = node_cheio.chaves[ordem:]
+        node_cheio.chaves = node_cheio.chaves[:ordem - 1]
+
+        if not node_cheio.folhas: # se não for node interno
+            node_novo.filhos = node_cheio.filhos[ordem:]
+            node_cheio.filhos = node_cheio.filhos[:ordem]
+
+    def _inserir_nao_cheio(self, node, chave)
+        i = len(node.chaves) - 1 # quantidade de chaves e aponta para o ultimo indice do nodo (-1)
+
+        if node.folhas: # o node é uma folha
+            node.chaves.append(None) # cria um espaço no final da lista para add chave, facilita o processo de deslocamento
+            while i >= 0 and chave < node.chaves[i]: # percorre as chaves da direita pra esquerda
+                node.chaves[i+1] = node.chaves[i] # desloca a chave
                 i -= 1
-            no_atual.chaves[i + 1] = chave
-        else:
-            # Se não for uma folha, insere no filho adequado
-            i = len(no_atual.chaves) - 1
-            while i >= 0 and chave < no_atual.chaves[i]:
+            node.chaves[i+1] = chave # adiciona a chave no seu lugar
+
+        else: # node interno que tem filhos
+            while i >= 0 and chave < node.chaves[i]:
                 i -= 1
             i += 1
-            if len(no_atual.filhos[i].chaves) == (2 * self.ordem) - 1:
-                self.dividir_no(no_atual, i)
-                if chave > no_atual.chaves[i]:
+
+            if len(node.filhos[i].chaves) == (2 * self.ordem)
+                self._dividir_node(node, i)
+                if chave > node.chaves[i]
                     i += 1
-            self.inserir_nao_cheio(no_atual.filhos[i], chave)
-
-    def __str__(self):
-        r = self.raiz
-        return r.__str__() + '\n'.join([str(child) for child in r.filhos])
-
+            self._inserir_nao_cheio(node.filhos[i], chave)
 
     # buscar
     # remover
