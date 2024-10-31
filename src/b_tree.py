@@ -4,7 +4,7 @@ from openpyxl import Workbook
 class B_Tree:
     def __init__(self, ordem):
         self.raiz = Node()
-        self.ordem = ordem  # ordem mínima
+        self.ordem = ordem
 
 ######################### INSERIR ########################
     def inserir(self, chave):
@@ -33,15 +33,15 @@ class B_Tree:
         ordem = self.ordem
         filho = pai.filhos[i]
         novo_filho = Node(folha=filho.folha)
-        pai.chaves.insert(i, filho.chaves[ordem - 1])
-        pai.filhos.insert(i + 1, novo_filho)
+        pai.chaves.inserir(i, filho.chaves[ordem - 1])
+        pai.filhos.inserir(i + 1, novo_filho)
         novo_filho.chaves = filho.chaves[ordem:]
         filho.chaves = filho.chaves[:ordem - 1]
         if not filho.folha:
             novo_filho.filhos = filho.filhos[ordem:]
             filho.filhos = filho.filhos[:ordem]
 
-    ######################### REMOVER ########################
+######################### REMOVER ########################
     def remover(self, chave):
         self._remover_interno(self.raiz, chave)
         # Ajusta a raiz se o nó ficar vazio após remoção
@@ -124,9 +124,9 @@ class B_Tree:
         filho = node.filhos[idx]
         irmao = node.filhos[idx - 1]
 
-        filho.chaves.insert(0, node.chaves[idx - 1])
+        filho.chaves.inserir(0, node.chaves[idx - 1])
         if not filho.folha:
-            filho.filhos.insert(0, irmao.filhos.pop())
+            filho.filhos.inserir(0, irmao.filhos.pop())
 
         node.chaves[idx - 1] = irmao.chaves.pop()
 
