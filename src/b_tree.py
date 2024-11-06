@@ -192,7 +192,7 @@ class B_Tree:
             if not node.folha:
                 self._imprimir_todos_nos(node.filhos[i])
             # Em seguida, imprime a chave atual
-            print(f"Título: {node.chaves[i]['title']}, Ano: {node.chaves[i]['year']}, Gênero: {node.chaves[i]['genre']}")
+            print(f"Título: {node.chaves[i]['title']} ({node.chaves[i]['year']}) - {node.chaves[i]['genre']}")
         
         # Finalmente, imprime o último filho, se existir
         if not node.folha:

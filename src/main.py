@@ -7,9 +7,9 @@ if __name__ == "__main__":
     while True:
         print('-'*35)
         print("| Catalogo de Filmes")
-        print("| [1] - Vizualizar Catalogo")
+        print("| [1] - Visualizar Catalogo")
         print("| [2] - Adicionar novo filme")
-        print("| [3] - Buscar Titulo")
+        print("| [3] - Buscar Filme")
         print("| [4] - Remover Filme do Catalogo")
         print("| [0] - Encerrar Programa")
         print('-'*35)
@@ -19,14 +19,14 @@ if __name__ == "__main__":
         except ValueError:
             print("Valor invalido! Digite um número de 0 a 4")
             continue
-
+        print('\n')
         match opc:
             case 1:
-                vizualizarCatalogo(catalogo)
+                visualizarCatalogo(catalogo)
             case 2:
                 addFilme(catalogo)
             case 3:
-                buscarTitulo(catalogo)
+                buscar(catalogo)
             case 4:
                 removerFilme(catalogo)
             case 0:

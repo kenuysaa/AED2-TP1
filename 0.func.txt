@@ -1,0 +1,13 @@
+1 - adiconar filme
+    auto balanceamento por titulo
+    salvar dados do filme em um arquivo excel
+
+2 - remover filme
+    excluir do arquivo excel
+    auto balanceamento
+
+3 - buscar filme por titulo
+    ler o arquivo excel
+
+4 - imprimir catalogo
+    ler o arquivo excel
